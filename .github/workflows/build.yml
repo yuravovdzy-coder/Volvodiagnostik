@@ -97,3 +97,7 @@ jobs:
         with:
           name: VolvoApp-Clean-APK
           path: bin/*.apk
+          - name: Clone python-for-android
+  run: |
+    mkdir -p .buildozer/android/platform
+    git clone https://github.com/kivy/python-for-android.git .buildozer/android/platform/python-for-android
