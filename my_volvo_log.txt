@@ -1,0 +1,63 @@
+import os
+
+def load_data():
+    database = {}
+    file_path = 'p3_data.txt'
+    
+    if not os.path.exists(file_path):
+        print(f"Помилка: Файл {file_path} не знайдено!")
+        return database
+
+    with open(file_path, 'r', encoding='utf-8') as f:
+        content = f.read().split('P#')
+        for item in content:
+            if not item.strip():
+                continue
+            
+            # Розділяємо номер і опис
+            lines = item.strip().split('\n')
+            first_line = lines[0].split()
+            if not first_line: continue
+            
+            code = first_line[0] # Наприклад, 101
+            title = " ".join(first_line[1:]) # Оригінальна назва
+            description = " ".join([l.strip() for l in lines[1:]]) # Переклад
+            
+            database[code] = {
+                "title": title,
+                "desc": description
+            }
+    return database
+
+def volvo_p3_agent():
+    db = load_data()
+    print(f"--- Завантажено {len(db)} параметрів Volvo P3 ---")
+    
+    while True:
+        query = input("\nВведіть P# (напр. 101) або назву (напр. тиск): ").lower()
+        
+        if query == 'вихід':
+            break
+
+        found = False
+        # Пошук за кодом
+        if query in db:
+            print(f"\n📍 ЗНАЙДЕНО: P#{query}")
+            print(f"🇬🇧 Original: {db[query]['title']}")
+            print(f"🇺🇦 Переклад: {db[query]['desc']}")
+            found = True
+        else:
+            # Пошук за словом у описі
+            for code, data in db.items():
+                if query in data['desc'].lower() or query in data['title'].lower():
+                    print(f"\n📍 ЗНАЙДЕНО: P#{code}")
+                    print(f"🇬🇧 Original: {data['title']}")
+                    print(f"🇺🇦 Переклад: {data['desc']}")
+                    found = True
+        
+        if not found:
+            print("Нічого не знайдено. Спробуйте інше слово.")
+
+if __name__ == "__main__":
+    volvo_p3_agent()
+	
