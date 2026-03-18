@@ -1,0 +1,487 @@
+P#001 Vehicle Type  
+             Тип транспортного   засобу
+P#002 Doors                 
+             Двері
+P#003 Transmission     
+             Трансмісія
+P#004 Bifuel                  
+             Двопаливний
+P#005 Engine    
+             Двигун
+P#006 Fuel    
+              Паливо
+P#007 Alternator
+             Генератор
+P#008 Steering wheel position
+              Положення    керма
+P#009 Gearbox    
+             Коробка передач
+P#010 Gearbox type    
+             Тип коробки передач
+P#011 Fuel tank, volume
+             Паливний бак, об'єм
+P#012 Alarm
+             Сигналізація
+P#013 Screen Skins (DIM/IAM/IHU)
+             Скін-екран (DIM/IAM/IHU)
+P#014 Headlights. type
+             Фари, тип
+P#015 Headlights, symmetry
+             Фари, симетрія
+P#016 Dayrunning light
+             Денні ходові вогні
+P#017 Dimmed dipped headlights
+             Ближнє світло з затемненими фарами
+P#018 Foglight
+             Протитуманна фара
+P#020 Trailer module
+             Модуль причепа
+P#021 Kevless entry and start
+            Безключовий доступ та запуск
+P#022 Additional Heater/Fuel fired Heater
+     Додатковий обігрівач / Паливний обігрівач
+P#023 Cruise control 
+             Круїз-контроль
+P#024 Rain sensor
+            Датчик дощу
+P#025 Headlight cleaning
+             Очищувач фар
+P#026 Power Steering Type
+             Тип гідропідсилювача керма
+P#027 Trip computer
+             Бортовий комп'ютер
+P#028 Private locking. trunk
+             Приватний замок багажника
+P#029 Child lock, rear doors
+             Дитячий замок, задні двері
+P#030 Unlock setting
+             Налаштування розблокування
+P#031 Acknowledge signal Lock/Alarm      
+      Підтвердження сигналу блокування 
+      сигналізація
+P#032 Automatic locking by speed
+         Автоматичне блокування за швидкістю
+P#033 Level sensor if Alarm
+             Датчик рівня при тривозі
+P#034 Retrigg if Alamm
+             Повторне спрацювання тривоги
+P#035 Passive Alarm Activation
+             Активація пасивної тривоги
+P-036 Panic alanm
+            Тривога
+P#037 Blind Spot Information System (BLIS) Cross Traffic Alert(CTA
+Система інформації про сліпі зони (BLIS) Попередження про перехресний рух (CTA)
+P#038 Road friction detection
+             Виявлення тертя на дорозі
+P#039 PTC heater
+             Обігрівач PTC
+P#040 DIM Type
+             Тип DIM
+P#041 Coupe filter (CCM)
+             Фільтр купе (CCM
+P#042 Climate Control Unit (CCM)
+              Блок клімат-контролю (CCM)
+P#043 Speed limitation
+              Обмеження швидкості
+P#044 Speed warning device (DIM)
+ Пристрій попередження про швидкість (DIM)
+P#045 Instrument cluster calibration (DIM)
+           Калібрування комбінації приладів (DIM)
+P#046 Wheel brakes type front
+             Тип передніх колісних гальм
+P#047 Interior Movement Sensor
+             Датчик руху салону
+P#048 Heartbeat sensor
+             Датчик серцебиття
+P#049 Heated rear seat
+            Підігрів заднього сидіння
+P#050 Telephone (PHM) 
+             Телефон (PHM)
+P#051 Tyre circumference
+             Окружність шини
+P#052 Service interval
+             Інтервал обслуговування
+P#053 Seat heat calibration
+             Калібрування підігріву сидіння
+P#054 Heated front seats 
+             Підігрів передніх сидінь
+P#055 Ventilated front seats
+             Вентильовані передні сидіння
+P#056 Callstart of parking heater 
+            Виклик стоянкового обігрівача
+P#057 Parking brake type (PBM) 
+            Тип стоянкового гальма (PBM)
+P#058 Heated windscreen
+             Підігрів лобового скла
+P#059 Parking assistance (PAM) 
+            Допомога при паркуванні (PAM)
+P#060 Hill Descent Control (HDC) 
+             Система допомоги при спуску з  
+              підйому (HDC)
+ P#061 Seatbelt reminder type 
+              Тип нагадування про ремені безпеки
+P#062 Brand
+             Бренд
+P#063 Frequency remote  contros
+             Частота, дистанційне керування
+P#064 Rear Air Condition
+             Задній кондиціонер
+P#065 Windscreen
+             Вітрове скло
+P#066 Pressure Sensor, Impact Sensor
+             Датчик тиску. Датчик удару
+P#067 DRL tvpe
+             Тип денних ходових вогнів
+P#068 Cornering light (Fog or DBL type)
+             Поворотне світло (тип Fogier DBL)
+P#069 Cold start support
+             Підтримка холодного запуску
+P#070 Tvre dimens
+             Розмір шин
+P#072 Navigation/Traveller Assistance 
+             Навігація/Допомога мандрівникам
+P#073 Rear Windshield Curtain
+             Шторка заднього лобового скла
+P#074 Forward side marking lights
+             Передні габаритні вогні
+ P#075
+P#076 Trafic Information VICS (Japan only)
+           Інформація про дорожній рух VICS   
+              ( лише для Японії)
+P#077 Remote engine start with keyfob
+            Дистанційний запуск двигуна за       
+           допомогою брелока
+P#078 Connectivity Control (IHU)
+            Контроль підключення (IHU)
+P#079 Hood sensor
+              Датчик капота
+P#080 GPS time (IHU)
+              Час GPS (IHU)
+P#081 Active Suspension (Four-C)
+             Активна підвіска (Four-C)
+P#082 Steering Gear
+              Рульовий механізм
+P#083 Lock type central locking
+             Центральний замок типу замка
+P#084 Side Windows
+             Бічні вікна
+P#085 Rear View Mirrors, Outside
+             Дзеркала заднього виду. Зовнішні
+P#086 Memory function
+             Функція пам'яті
+P#087 Puddle Light, Outer Mirrors
+             Освітлення для дзеркал. Зовнішні
+             дзеркала
+P#088 Automatic Headlights. High Beam.
+             Автоматичне дальнє світло фар
+ P#089 Airbag passenger side (SRS)
+              Подушка безпеки пасажира (SRS)
+P#090 Passenger Airbag Cut Off Switch(PACOS) 
+Вимикач подушки безпеки пасажира (PACOS)
+P#091 External ISIM-card SIM reader (PHM)
+       Зовнішній зчитувач SIM-картки (PHM)
+P#092 Music server
+            Музичний сервер
+P#093 Instrument and Radio Language 
+          Мова приладової панелі та радіо
+P#094 El Car Heater
+              Електричний обігрівач автомобіля
+P#095 Interior Ventilation
+             Вентиляція салону
+P#096 Collision Mitigation by Braking (CMbB)
+      Пом'якшення зіткнення шляхом
+        гальмування (CMbB)
+ P#097 Forward Collision Warning (FCW)
+    Попередження про лобове зіткнення (FCW)
+P#098 Lane Departure Warning (LDW)
+  Попередження про вихід зі смуги руху (LDW)
+P#099 Park Assist Camera (PAC) 
+        Камера допомоги при паркуванні (PAC)
+P#100 12V Outlet In Luggage
+          Розетка 12 В у багажнику
+ P#101 Tire Pressure Monitoring System (TPMS) 
+        Система контролю тиску в шинах (TPMS)
+P#102 Oil Level Sensor
+               Датчик рівня оливи
+ P#103 Roll Stability Control (RSC) 
+        Система контролю стійкості до
+        перекидання (RSC)
+P#104 Vacuum Pump brake booster
+             Вакуумний насос підсилювача гальм
+ P#105 Disc brake type
+                Тип дискового гальма
+ P#106 Emergency Brake Light
+               Аварійний гальмівний ліхтар
+ P#107 Auxiliary Lights
+               Допоміжні ліхтарі
+P#108 Roof Hatch
+              Люк на даху
+P#109 Power Windows frontear
+     Електричні склопідйомники спереду/ззаду
+#110 Forquency Band And Step
+          Частотний діапазон та крок
+P#111 Rew Fouligne
+            Протитуманні фари
+P#112 indirect TPMSPMS)
+             Непрямий TPMS
+P113 Voice Control
+            Голосове керування
+ P#114 Haptic Controle
+             Тактильне керування
+P#115 Engine Cylinder count (Petrol/Diesel)
+    Лічильник аварій двигуна (бензин/дизель)
+P#116 License Plate Light
+             Підсвічування номерного знака
+P#117 Door Handle Light
+             Підсвічування ручки дверей
+P#118 Autolight Function
+             Функція автоматичного освітлення
+P#119 Radio, amplifier and speakers (AUD)
+             Радіо, підсилювач та динаміки (AUD)
+P#120 Centre Speaker in dashboard
+   Центральний динамік на приладовій панелі
+P#121 Subwoofer (SUB)
+             Сабвуфер (SUB)
+P#122 Rear Headphone Outlets
+            Роз'єми для задніх навушників
+P#123 Auxiliary Audio Input (AUX)
+             Допоміжний аудіовхід (AUX)
+P#124 Audio Player (IAM or IHU)
+             Аудіоплеєр (IAM або IHU)
+P#125 Digital Radio System (DAB)
+            Цифрова радіосистема (DAB)
+P#126 Microphone
+             Мікрофон
+P#127 Navigation System (IAM and IHU)
+            Навігаційна система (IAM та IHU)
+P#128 Parking Brake Switch
+             Перемикач стоянкового гальма
+P#129-
+P#130 Parksensor Pattern
+            Схема парктроника
+P#131-
+P#132-
+P#133
+P#134-
+P#135 Active Seat Belts, Front
+             Активні ремені безпеки, передні
+P#136
+P#137-
+P#138-
+P#139
+P#140-
+P#141-
+P#142-
+P#143-
+P#144-
+P#145
+P#145-
+P#147Audible Mislock Feedback
+        Звуковий зворотний зв'язок про                    
+           неправильне блокування
+P#148-
+P#149-
+P#150-
+P#151Emission-. Evaporation System (EVAP)
+          Система контролю викидів та
+              випаровування (EVAP)
+P#152 Foldable Rear Headrests
+            Складані задні підголівники
+P#153 External Alarm Unit
+           Зовнішній блок сигналізації
+P#154 Accessory USB Unit (AUU)
+            Додатковий USB-блок (AUU)
+P#155 Traffic Information TMC
+              TMC з інформацією про дорожній рух
+P#156 Video allowed
+              Відео дозволено
+P#157 Bluetooth Handsfree
+             Bluetooth Handsfree
+P#158 Occupant Weight Sensor (OWS)
+             Датчик ваги пасажира (OWS)
+P#159 Rear Belt Detection
+            Виявлення ременя безпеки ззаду
+P#160 PYRO Technical Steering Column
+             PYRO Технічна рульова колонка
+P#161 Adaptive Load Limiter, Front
+      Адаптивний обмежувач навантаження,        
+         передній
+P#162 Seat Track Sensors
+               Датчики положення сидіння7
+P#163 Lap Belt Pretensioner, Front
+Передній передній поясний ремені безпеки
+P#164 Front Crash Sensing System
+              Система переднього зіткнення
+P#165 Adaptiv ventilation Front
+             Адаптивна вентиляція передніх сидінь
+P#166 Additional Water Pump
+            Додатковий водяний насос
+P#167 Automatic activation parkingsbreak, Engine stall
+Автоматичне ввімкнення паркувального гальма, двигун зупинився?
+P#168 Automatic activation parkingsbreak when key removed
+Автоматичне ввімкнення паркувального гальма при вилученні ключа
+P#169 Automatic Release of parkingbreak
+Автоматичне ввімкнення паркувального гальма
+P#170 Digital instruction manual
+             Цифрова інструкція з експлуатації
+P#171 Connected service booking
+              Бронювання підключеного сервісу
+P#172 Navigation Mapregion (IHU)
+             Регіон навігаційної карти (IHU)
+P#173 Rear Entertainment System (RSE)
+            Задня розважальна система (RSE)
+P#174 TV tuner
+                  ТВ-тюнер
+P#175 Language for navigator
+              Мова для навігатора
+P#176 Boot Release. Pop up
+             Відкриття багажника. Висувне вікно
+P#177 Self-opening Bootlid/Tailgate
+     Автоматичне відкриття кришки багажника
+P#178 Shift Indication
+             Індикація перемикання
+P#179 Neutral Control, automatic gearbox
+       Нейтральне керування, 
+      автоматична   коробка передач
+P#180-
+P#181 Damp Sensor
+            Датчик вологості
+P#182 Clean Zone Interior
+             Чиста зона салону
+P#183 Cooling Fan Performance
+    Продуктивність вентилятора охолодження
+P#184 Simultaneous opening/closing of windows / doors 
+Одночасне відкриття/закриття вікон/дверей
+P#185-
+P#186 Electricly heated steering wheel
+            Електричне підігрівання керма
+P#187 Audio Buttons In Steering Wheel
+             Кнопки аудіо на кермі
+P#188 Handsfree Telemute-function/Sensus    
+   Connected Touch
+        Функція відключення звуку в режимі    
+        Handsfree/Sensus Connected Touch
+P#189-
+P#190-
+P#191 Driver Alert Control (DAC)
+Система контролю спостереження водія 
+P#192 City Safety
+              Міська безпека
+P#193 Remote locking with open doors
+        Дистанційне блокування з відкритими
+             дверима
+P#194-
+P#195 Fuelpump
+               Паливний насос
+P#196-
+P#197 Alcohol lock
+               Алкогольний замок
+P#199 Trailer stability assist
+             Система стабілізації причепа
+P#200 Seats
+              Сидіння
+P#201-
+P#202 Sun sensor
+              Датчик сонця
+P#203 Wheel Speed Sensor Type
+              Тип датчика швидкості коліс
+P#204 TV Tuner
+               ТВ-тюнер
+P#205 Foldable sidesteps (XC60)
+             Складані підніжки (XC60)
+P#206 Night vision or VICS
+             Нічне бачення або VICS
+P#207 Front Parking camera
+              Передня паркувальна камера
+P#208 Steering Wheel Lock
+               Блокування керма
+P#209 Intelligent Driver Information System (IDIS)
+Інтелектуальна інформаційна система водія (IDIS)
+P#210 Battery
+              Акумулятор
+P#211 Battery monitoring sensor
+             Датчик контролю акумулятора
+P#212 DVD Region
+           Регіон DVD
+P#213 Units for Temp/Trip/Fuel
+             Одиниці вимірювання температури
+P#214 Restricted Key Function
+             Обмежена функція ключа
+P#215 Infotainment Theft Protection (ITP) 
+      Захист від крадіжки
+      інформаційно-розважальної системи 
+P#216 Interior Lighting
+              Освітлення салону
+P#217 Video support
+            Підтримка відео
+P#218 Hill Start Assist (HSA)
+             Допомога при рушанні на підйомі 
+P#219 Language Region
+             Мова Регіон
+P#220 Park Assist, Side View Camera
+             Допомога при паркуванні, камера бокового виду
+P#221 Connected Service Booking/Power 3rd-Row/Spare
+Бронювання підключеного сервісу/Електроживлення 3-го ряду/Запасне місце
+P#222 Stop/Start
+             Стоп/Старт
+P#223 Interior rearview mirror
+            Дзеркало заднього виду в салоні
+P#224 Adjustable speed limit
+            Регульоване обмеження швидкості
+P#225 Recovery of stolen vehicle after theft
+       Повернення викраденого транспортного
+         засобу після крадіжки
+P#226 Lock and alarm indicator
+            Індикатор блокування та тривоги
+P#227 Service interval, engine time
+            Інтервал обслуговування, 
+P#228 Service interval, km/miles
+            Інтервал обслуговування, км/милі
+P#229 Service interval, time
+           Інтервал обслуговування, час
+P#230-
+P#231 Optimized Hydraulic Brake (OHB)
+             Оптимізоване гідравлічне гальмо
+P#232 Brake pads
+             Гальмівні колодки
+P#233 Article number format
+             Формат номера артикулу
+P#234 Automatic braking in the event of a collision
+Автоматичне гальмування у разі зіткнення
+P#235 Active Grill Shutter
+             Активна решітка радіатора
+P#236 Steering gear, C-factor
+              Кермовий механізм. C-фактор
+P#237 DRIVe
+             DRIVe
+P#238 Ignition Lock
+             Замок запалювання
+P#239 Massage Front Seat / My Key / Spare
+           Масаж переднього сидіння
+         /Мій ключ/Запасне
+P#240 Traffic Sign Recognition (TSI)
+              Розпізнавання дорожніх знаків
+P#241 Lane keeping Aid
+             Допомога утримання смуги руху
+P#242-
+P#243 Immobilizer
+            Іммобілайзер
+P#244 Privacy phone
+             Телефон конфіденційності
+P#245 Pedestrian Protection
+             Захист пішоходів
+P#246 Stop/Start Logic
+             Логіка старт/стоп
+P#247 Fueltank sensors
+            Датчики паливного бака
+P#248 Chassitype
+              Тип шасі
+P#249 External charging
+             Зовнішнє заряджання
+P#250 Electric Air Condition
+             Електричний кондиціонер
+P#251 Remote Controlled Direct Start of Precondition
+        Дистанційно керований прямий запуск
+          попереднього стану
+P#252 Electric motor
+            Електродвигун
