@@ -3,7 +3,7 @@ on: [push, workflow_dispatch]
 
 jobs:
   build:
-    # Змінюємо на стабільну версію, щоб уникнути помилок з autoconf
+    # Використовуємо 22.04 — вона стабільна для Buildozer
     runs-on: ubuntu-22.04
     
     steps:
@@ -28,7 +28,7 @@ jobs:
 
       - name: Build with Buildozer
         run: |
-          # Видаляємо можливі залишки попередніх невдалих спроб
+          # Чистий старт без залишків старих помилок
           rm -rf .buildozer
           yes | buildozer android debug
         env:
@@ -37,5 +37,5 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: VolvoApp-Package
+          name: VolvoApp-APK
           path: bin/*.apk
