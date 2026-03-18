@@ -29,3 +29,4 @@ jobs:
         with:
           name: VolvoApp-Package
           path: bin/*.apk
+FORCE JAVASCRIPT ACTIONS TO NODE24-true
