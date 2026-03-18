@@ -3,9 +3,9 @@ on: [push, workflow_dispatch]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-    env:
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+    # Змінюємо на стабільну версію, щоб уникнути помилок з autoconf
+    runs-on: ubuntu-22.04
+    
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -28,8 +28,8 @@ jobs:
 
       - name: Build with Buildozer
         run: |
-          # Виправляємо проблему з макросами перед збіркою
-          export ac_cv_prog_gnu_ld=yes
+          # Видаляємо можливі залишки попередніх невдалих спроб
+          rm -rf .buildozer
           yes | buildozer android debug
         env:
           ACCEPT_SDK_LICENSE: "yes"
@@ -37,5 +37,5 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: VolvoApp-Clean-APK
+          name: VolvoApp-Package
           path: bin/*.apk
