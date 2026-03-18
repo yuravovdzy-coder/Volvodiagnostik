@@ -10,10 +10,9 @@ jobs:
 
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-      ACCEPT_SDK_LICENSE: "yes"
 
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Setup Node.js
@@ -27,53 +26,53 @@ jobs:
           python-version: '3.11'
 
       - name: Install system dependencies
-        run: |
-          sudo apt update
-          sudo apt install -y \
-            build-essential \
-            git \
-            zip \
-            unzip \
-            openjdk-17-jdk \
-            python3-pip \
-            python3-setuptools \
-            python3-wheel \
-            ffmpeg \
-            libsdl2-dev \
-            libsdl2-image-dev \
-            libsdl2-mixer-dev \
-            libsdl2-ttf-dev \
-            libportmidi-dev \
-            libswscale-dev \
-            libavformat-dev \
-            libavcodec-dev \
-            libavutil-dev \
-            zlib1g-dev \
-            libunwind-dev \
-            libgstreamer1.0-dev \
-            libgstreamer-plugins-base1.0-dev \
-            cmake \
-            autoconf \
-            automake \
-            libtool \
-            pkg-config \
-            libffi-dev \
-            m4 \
-            libpulse-dev \
-            libasound2-dev \
-            libegl1-mesa-dev \
-            libgles2-mesa-dev \
-            libgl1-mesa-dev \
-            libglu1-mesa-dev \
-            libx11-dev \
-            libxext-dev \
-            libxrandr-dev \
-            libxi-dev \
-            libxinerama-dev \
-            libxcursor-dev \
-            libxfixes-dev \
-            libxss-dev \
-            libxv-dev
+  run: |
+    sudo apt update
+    sudo apt install -y \
+      build-essential \
+      git \
+      zip \
+      unzip \
+      openjdk-17-jdk \
+      python3-pip \
+      python3-setuptools \
+      python3-wheel \
+      ffmpeg \
+      libsdl2-dev \
+      libsdl2-image-dev \
+      libsdl2-mixer-dev \
+      libsdl2-ttf-dev \
+      libportmidi-dev \
+      libswscale-dev \
+      libavformat-dev \
+      libavcodec-dev \
+      libavutil-dev \
+      zlib1g-dev \
+      libunwind-dev \
+      libgstreamer1.0-dev \
+      libgstreamer-plugins-base1.0-dev \
+      cmake \
+      autoconf \
+      automake \
+      libtool \
+      pkg-config \
+      libffi-dev \
+      m4 \
+      libpulse-dev \
+      libasound2-dev \
+      libegl1-mesa-dev \
+      libgles2-mesa-dev \
+      libgl1-mesa-dev \
+      libglu1-mesa-dev \
+      libx11-dev \
+      libxext-dev \
+      libxrandr-dev \
+      libxi-dev \
+      libxinerama-dev \
+      libxcursor-dev \
+      libxfixes-dev \
+      libxss-dev \
+      libxv-dev
 
       - name: Upgrade pip & install Buildozer
         run: |
@@ -88,6 +87,8 @@ jobs:
         run: |
           buildozer android clean
           buildozer -v android debug
+        env:
+          ACCEPT_SDK_LICENSE: "yes"
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
