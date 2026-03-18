@@ -1,9 +1,14 @@
+
 name: Build APK
 on: [push, workflow_dispatch]
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    # Це те, що просить GitHub у попередженні:
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+      
     steps:
       - uses: actions/checkout@v4
 
@@ -20,12 +25,14 @@ jobs:
 
       - name: Build with Buildozer
         run: |
+          # Автоматичне підтвердження ліцензій SDK
           yes | buildozer android debug
         env:
           ACCEPT_SDK_LICENSE: "yes"
 
       - name: Upload APK
-        uses: ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true
+        uses: actions/upload-artifact@v4
         with:
           name: VolvoApp-Package
           path: bin/*.apk
+          
