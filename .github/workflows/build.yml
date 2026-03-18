@@ -75,7 +75,7 @@ jobs:
             libxss-dev \
             libxv-dev
 
-      - name: Upgrade pip & install Buildozer + p4a
+      - name: Install Buildozer, Cython and Python-for-Android
         run: |
           python -m pip install --upgrade pip
           pip install buildozer cython python-for-android
@@ -84,9 +84,12 @@ jobs:
         run: |
           yes | sdkmanager --licenses || true
 
-      - name: Build APK
+      - name: Clean previous builds
         run: |
           buildozer android clean
+
+      - name: Build APK
+        run: |
           buildozer -v android debug
 
       - name: Upload APK
