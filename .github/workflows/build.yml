@@ -25,8 +25,7 @@ jobs:
           ACCEPT_SDK_LICENSE: "yes"
 
       - name: Upload APK
-        uses: actions/upload-artifact@v4
+        uses: ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true
         with:
           name: VolvoApp-Package
           path: bin/*.apk
-FORCE JAVASCRIPT ACTIONS TO NODE24-true
