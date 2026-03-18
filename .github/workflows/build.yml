@@ -18,18 +18,18 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt update
-          # Додано повний набір інструментів: libtool, m4, autoconf, automake
           sudo apt install -y build-essential git python3 python3-dev ffmpeg \
             libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev \
             libportmidi-dev libswscale-dev libavformat-dev libavcodec-dev \
             zlib1g-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
             libgstreamer-plugins-good1.0-dev libtool autoconf automake pkg-config \
-            libffi-dev m4
+            libffi-dev m4 gettext
           pip install --user buildozer cython
 
       - name: Build with Buildozer
         run: |
-          # Додаємо автоматичне погодження на все
+          # Виправляємо проблему з макросами перед збіркою
+          export ac_cv_prog_gnu_ld=yes
           yes | buildozer android debug
         env:
           ACCEPT_SDK_LICENSE: "yes"
