@@ -18,8 +18,12 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt update
-          # Тут я виправив назви пакетів GStreamer на ті, що існують в Ubuntu 22.04/24.04
-          sudo apt install -y build-essential git python3 python3-dev ffmpeg libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev libportmidi-dev libswscale-dev libavformat-dev libavcodec-dev zlib1g-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libgstreamer-plugins-good1.0-dev
+          # Додано libtool, autoconf, automake та pkg-config для виправлення помилки LT_SYS_SYMBOL_USCORE
+          sudo apt install -y build-essential git python3 python3-dev ffmpeg \
+            libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev \
+            libportmidi-dev libswscale-dev libavformat-dev libavcodec-dev \
+            zlib1g-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
+            libgstreamer-plugins-good1.0-dev libtool autoconf automake pkg-config libffi-dev
           pip install --user buildozer cython
 
       - name: Build with Buildozer
