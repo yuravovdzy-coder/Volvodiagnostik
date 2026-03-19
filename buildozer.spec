@@ -138,7 +138,7 @@ android.minapi = 24
 # agreements. This is intended for automation only. If set to False,
 # the default, you will be shown the license when first running
 # buildozer.
-# android.accept_sdk_license = True
+android.accept_sdk_license = True
 
 # (str) Android entry point, default is ok for Kivy-based app
 #android.entrypoint = org.kivy.android.PythonActivity
@@ -450,4 +450,4 @@ warn_on_root = 1
 #    Then, invoke the command line with the "demo" profile:
 #
 #buildozer --profile demo android debug
-#android.build_tools_version = 34.0.0
+android.build_tools_version = 34.0.0
