@@ -36,13 +36,17 @@ jobs:
 
       - name: Build with Buildozer
         run: |
-          # Видаляємо старі дистрибутиви, щоб Gradle не видавав Broken pipe
+          # Примусово погоджуємося на всі ліцензії Google SDK
+          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
+          
+          # Очищення від попередніх невдач
           rm -rf .buildozer/android/platform/build-arm64-v8a/dists
-          # Запуск з прапорцем -v (verbose), щоб бачити деталі в реальному часі
+          
+          # Запуск збірки з виводом логів
           buildozer -v android debug
         env:
           ACCEPT_SDK_LICENSE: "yes"
-
+          
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
