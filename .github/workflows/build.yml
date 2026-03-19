@@ -36,19 +36,16 @@ jobs:
             liblzma-dev libffi-dev uuid-dev tar \
             autoconf automake libtool libtool-bin m4 pkg-config
           
-          # КРИТИЧНЕ ВИПРАВЛЕННЯ: Копіюємо макроси libtool туди, де autoconf їх знайде
-          sudo cp /usr/share/aclocal/libtool.m4 /usr/share/aclocal/ltoptions.m4 \
-                  /usr/share/aclocal/ltsugar.m4 /usr/share/aclocal/ltversion.m4 \
-                  /usr/share/aclocal/lt~obsolete.m4 /usr/share/autoconf/autoconf/ || true
-
+          # Оновлюємо базові інструменти Python
           pip install --user --upgrade pip
-          pip install --user "cython<3.0.0" buildozer
+          pip install --user "setuptools<70.0.0" "wheel" "cython<3.0.0" buildozer
           echo "$HOME/.local/bin" >> $GITHUB_PATH
-          
+
       - name: Build with Buildozer
         run: |
           yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
-          ~/.local/bin/buildozer -v android debug
+          # Важливо: використовуємо заздалегідь підготовлений шлях
+          buildozer -v android debug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
