@@ -27,7 +27,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y \
+          sudo apt-get install -p -y \
             build-essential git python3-dev ffmpeg libsdl2-dev libsdl2-image-dev \
             libsdl2-mixer-dev libsdl2-ttf-dev libportmidi-dev libswscale-dev \
             libavformat-dev libavcodec-dev zlib1g-dev libsqlite3-dev sqlite3 \
@@ -43,13 +43,12 @@ jobs:
       - name: Build with Buildozer
         run: |
           yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
-          # Очищаємо попередню невдалу збірку
-          ~/.local/bin/buildozer android clean
+          # Ми не використовуємо 'clean' тут, щоб уникнути помилки FileNotFoundError на чистій системі
           ~/.local/bin/buildozer -v android debug
-          
+
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: VolvoApp
+          name: VolvoApp_Debug
           path: bin/*.apk
           
