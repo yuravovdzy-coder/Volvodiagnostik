@@ -33,6 +33,20 @@ jobs:
           # Додаємо шлях до buildozer у системний PATH
           echo "/home/runner/.local/bin" >> $GITHUB_PATH
 
+      - name: Install Buildozer and Cython
+        run: |
+          pip install --user --upgrade pip
+          pip install --user "cython<3.0.0" "setuptools<70.0.0" buildozer
+          # Цей рядок "лікує" помилку, додаючи шлях до Cython у середовище GitHub
+          echo "$(python3 -m site --user-base)/bin" >> $GITHUB_PATH
+
+      - name: Build with Buildozer
+        run: |
+          # Додаткова перевірка шляху безпосередньо перед запуском
+          export PATH=$PATH:$(python3 -m site --user-base)/bin
+          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
+          buildozer -v android debug
+          
       - name: Build with Buildozer
         run: |
           # Приймаємо ліцензії через прямий шлях до sdkmanager
