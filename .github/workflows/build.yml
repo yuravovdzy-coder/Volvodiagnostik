@@ -1,9 +1,8 @@
-name: Build APK (Optimized)
+name: Build APK
 
 on:
   push:
     branches: [ main ]
-  workflow_dispatch:
 
 jobs:
   build:
@@ -27,29 +26,26 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y \
-            build-essential git python3-dev ffmpeg libsdl2-dev libsdl2-image-dev \
-            libsdl2-mixer-dev libsdl2-ttf-dev libportmidi-dev libswscale-dev \
-            libavformat-dev libavcodec-dev zlib1g-dev libsqlite3-dev sqlite3 \
-            bzip2 libbz2-dev libssl-dev openssl libgdbm-dev libgdbm-compat-dev \
-            libncurses5-dev libreadline6-dev libdb5.3-dev libexpat1-dev \
-            liblzma-dev libffi-dev uuid-dev tar \
-            autoconf automake libtool libtool-bin m4 pkg-config
-          
-          # Оновлюємо базові інструменти Python
-          pip install --user --upgrade pip
-          pip install --user "setuptools<70.0.0" "wheel" "cython<3.0.0" buildozer
-          echo "$HOME/.local/bin" >> $GITHUB_PATH
+          sudo apt-get install -y python3-pip build-essential git python3-dev ffmpeg libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev libportmidi-dev libswscale-dev libavformat-dev libavcodec-dev zlib1g-dev
+          sudo apt-get install -y libsqlite3-dev sqlite3 bzip2 libbz2-dev libssl-dev openssl libgdbm-dev libgdbm-compat-dev libncurses5-dev libreadline6-dev libdb5.3-dev libexpat1-dev liblzma-dev libffi-dev uuid-dev tar
+          pip install --upgrade pip
+          pip install buildozer
+          # Додаємо шлях до buildozer у системний PATH
+          echo "/home/runner/.local/bin" >> $GITHUB_PATH
 
       - name: Build with Buildozer
         run: |
+          # Приймаємо ліцензії через прямий шлях до sdkmanager
           yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
-          # Важливо: використовуємо заздалегідь підготовлений шлях
-          buildozer -v android debug
+          
+          # Очищення та збірка
+          buildozer android debug
+        env:
+          ACCEPT_SDK_LICENSE: "yes"
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: VolvoApp_Debug
+          name: package
           path: bin/*.apk
           
