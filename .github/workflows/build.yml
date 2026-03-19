@@ -23,8 +23,9 @@ jobs:
             zlib1g-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
             libgstreamer-plugins-good1.0-dev libtool autoconf automake pkg-config \
             libffi-dev m4 gettext libunwind-dev
-          pip install --user buildozer cython
-
+          # Встановлюємо стару версію Cython для сумісності з pyjnius
+          pip install --user "cython<3.0.0" buildozer
+          
       - name: Build with Buildozer
         run: |
           # Видаляємо всі приховані папки buildozer, щоб усунути FileNotFoundError
