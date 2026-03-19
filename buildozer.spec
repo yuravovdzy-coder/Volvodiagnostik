@@ -115,7 +115,7 @@ android.minapi = 24
 # (int) Android NDK API to use. This is the minimum API your app will support, it should usually match android.minapi.
 #android.ndk_api = 21
 
-# android.build_tools_version = 34.0.0
+android.build_tools_version = 34.0.0
 
 # (bool) Use --private data storage (True) or --dir public storage (False)
 #android.private_storage = True
@@ -450,4 +450,3 @@ warn_on_root = 1
 #    Then, invoke the command line with the "demo" profile:
 #
 #buildozer --profile demo android debug
-android.build_tools_version = 34.0.0
