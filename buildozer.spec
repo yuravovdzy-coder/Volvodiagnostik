@@ -444,10 +444,10 @@ warn_on_root = 1
 #
 #[app@demo]
 #title = Volvo Diagnostic (demo)
-# android.build_tools_version = 34.0.0
 #[app:source.exclude_patterns@demo]
 #images/hd/*
 #
 #    Then, invoke the command line with the "demo" profile:
 #
 #buildozer --profile demo android debug
+#android.build_tools_version = 34.0.0
