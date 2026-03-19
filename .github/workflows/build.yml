@@ -39,12 +39,14 @@ jobs:
           pip install --user --upgrade pip
           pip install --user "cython<3.0.0" buildozer
           echo "$HOME/.local/bin" >> $GITHUB_PATH
-          
+
       - name: Build with Buildozer
         run: |
           yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
-          buildozer -v android debug
-
+          # Очищаємо попередню невдалу збірку
+          ~/.local/bin/buildozer android clean
+          ~/.local/bin/buildozer -v android debug
+          
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
