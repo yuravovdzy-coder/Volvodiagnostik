@@ -26,15 +26,14 @@ jobs:
           # Встановлюємо стару версію Cython для сумісності з pyjnius
           pip install --user "cython<3.0.0" buildozer
           
-      - name: Build with Buildozer
+            - name: Build with Buildozer
         run: |
-          # Видаляємо всі приховані папки buildozer, щоб усунути FileNotFoundError
           rm -rf .buildozer/
-          rm -rf bin/
-          # Запускаємо збірку з нуля
-          yes | buildozer android debug
+          # Додано -v для детального логування
+          buildozer -v android debug
         env:
           ACCEPT_SDK_LICENSE: "yes"
+          
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
