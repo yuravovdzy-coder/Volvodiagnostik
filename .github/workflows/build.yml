@@ -24,15 +24,6 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Cache Buildozer
-        uses: actions/cache@v4
-        with:
-          path: .buildozer
-          key: ${{ runner.os }}-buildozer-${{ hashFiles('buildozer.spec') }}
-          restore-keys: |
-            ${{ runner.os }}-buildozer-
-
-
       - name: Install dependencies
         run: |
           sudo apt-get update
@@ -47,21 +38,15 @@ jobs:
           
           pip install --upgrade pip
           pip install "cython<3.0.0" buildozer
-          echo "/home/runner/.local/bin" >> $GITHUB_PATH
 
       - name: Build with Buildozer
         run: |
-          # 1. Приймаємо ліцензії (це важливо для SDK 33)
           yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
-          
-          # 2. НЕ використовуємо 'clean', якщо папка .buildozer порожня або відсутня.
-          # Використовуємо повний шлях до бінарника, який ми встановили через pip.
-          ~/.local/bin/buildozer -v android debug
-          
-          
+          buildozer -v android debug
+
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: package
+          name: VolvoApp
           path: bin/*.apk
           
