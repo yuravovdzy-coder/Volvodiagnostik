@@ -4,7 +4,6 @@ on: [push, workflow_dispatch]
 jobs:
   build:
     runs-on: ubuntu-22.04
-    
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -14,13 +13,11 @@ jobs:
         with:
           python-version: '3.11'
 
-      # --- ОСЬ ЦЕЙ НОВИЙ БЛОК ---
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
-      # --------------------------
 
       - name: Install dependencies
         run: |
@@ -31,22 +28,19 @@ jobs:
             zlib1g-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
             libgstreamer-plugins-good1.0-dev libtool autoconf automake pkg-config \
             libffi-dev m4 gettext libunwind-dev
-          # Використовуємо Cython 0.29.x для стабільності jnius
           pip install --user "cython<3.0.0" buildozer
 
       - name: Build with Buildozer
         run: |
-          # Примусово погоджуємося на всі ліцензії Google SDK
-          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
-          
-          # Очищення від попередніх невдач
+          # Автоматичне прийняття ліцензій Android SDK
+          yes | sdkmanager --licenses || true
+          # Очищення старих дистрибутивів
           rm -rf .buildozer/android/platform/build-arm64-v8a/dists
-          
-          # Запуск збірки з виводом логів
+          # Запуск збірки
           buildozer -v android debug
         env:
           ACCEPT_SDK_LICENSE: "yes"
-          
+
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
