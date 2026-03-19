@@ -1,9 +1,13 @@
 name: Build APK
-on: [push, workflow_dispatch]
+
+on:
+  push:
+    branches: [ main ]
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -19,32 +23,29 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Build with Buildozer
+      - name: Install dependencies
         run: |
-          # Примусове прийняття ліцензій
-          mkdir -p $ANDROID_HOME/licenses
-          echo -e "247a1c6d2130e386b033722a45d0c73243265578\n8933bad161af4178b1185d1a37fbf41ea5269c55\nd56f5187479451eabf01fb743830217961d4187e" > $ANDROID_HOME/licenses/android-sdk-license
-          yes | sdkmanager --licenses || true
-          
-          # Очищення та збірка
-          rm -rf .buildozer/android/platform/build-arm64-v8a/dists
-          buildozer -v android debug
-          
+          sudo apt-get update
+          sudo apt-get install -y python3-pip build-essential git python3-dev ffmpeg libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev libportmidi-dev libswscale-dev libavformat-dev libavcodec-dev zlib1g-dev
+          sudo apt-get install -y libsqlite3-dev sqlite3 bzip2 libbz2-dev libssl-dev openssl libgdbm-dev libgdbm-compat-dev libncurses5-dev libreadline6-dev libdb5.3-dev libexpat1-dev liblzma-dev libffi-dev uuid-dev tar
+          pip install --upgrade pip
+          pip install buildozer
+          # Додаємо шлях до buildozer у системний PATH
+          echo "/home/runner/.local/bin" >> $GITHUB_PATH
 
       - name: Build with Buildozer
         run: |
-          # Автоматичне прийняття ліцензій Android SDK
-          yes | sdkmanager --licenses || true
-          # Очищення старих дистрибутивів
-          rm -rf .buildozer/android/platform/build-arm64-v8a/dists
-          # Запуск збірки
-          buildozer -v android debug
+          # Приймаємо ліцензії через прямий шлях до sdkmanager
+          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
+          
+          # Очищення та збірка
+          buildozer android debug
         env:
           ACCEPT_SDK_LICENSE: "yes"
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: VolvoApp-APK
+          name: package
           path: bin/*.apk
           
