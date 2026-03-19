@@ -51,10 +51,13 @@ jobs:
 
       - name: Build with Buildozer
         run: |
+          # 1. Приймаємо ліцензії (це важливо для SDK 33)
           yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
-          # Очищаємо результати попередньої невдалої компіляції libffi
-          buildozer android clean
-          buildozer -v android debug
+          
+          # 2. НЕ використовуємо 'clean', якщо папка .buildozer порожня або відсутня.
+          # Використовуємо повний шлях до бінарника, який ми встановили через pip.
+          ~/.local/bin/buildozer -v android debug
+          
           
       - name: Upload APK
         uses: actions/upload-artifact@v4
