@@ -8,7 +8,7 @@ from kivy.uix.button import Button
 from kivy.uix.scrollview import ScrollView
 
 # ВСТАВТЕ ВАШ КЛЮЧ ТУТ
-API_KEY = gen-lang-client-0333935612
+API_KEY = "gen-lang-client-0333935612"
 AI_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key={API_KEY}"
 
 class MainInterface(TabbedPanel):
