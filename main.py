@@ -1,148 +1,173 @@
-import requests
+import kivy
 from kivy.app import App
-from kivy.uix.tabbedpanel import TabbedPanel, TabbedPanelItem
-from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.screenmanager import ScreenManager, Screen, FadeTransition
 from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.gridlayout import GridLayout
+from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
-from kivy.uix.textinput import TextInput
 from kivy.uix.button import Button
+from kivy.uix.togglebutton import ToggleButton
+from kivy.uix.textinput import TextInput
 from kivy.uix.image import Image
 from kivy.uix.scrollview import ScrollView
+from kivy.uix.carousel import Carousel
 from kivy.clock import Clock
-from kivy.properties import StringProperty
 from kivy.utils import get_color_from_hex
+import threading
+import requests
+import json
+import time
 
-# --- НАЛАШТУВАННЯ API ---
-# ВСТАВТЕ ВАШ КЛЮЧ
+# --- КОНФІГУРАЦІЯ AI ---
 API_KEY = "AIzaSyARna8YDsY4tQd8Cv0QAsWTUJvRDTZlUWE"
+AI_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={API_KEY}"
 
-# ОНОВЛЕНИЙ URL (Версія v1 замість v1beta)
-AI_URL = "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=" + API_KEY
+# --- БАЗА ПАРАМЕТРІВ OBD2 (30 PID) ---
+PIDS = {
+    "RPM": {"pid": "010C", "unit": "RPM", "formula": lambda d: (int(d[0],16)*256 + int(d[1],16))/4},
+    "SPEED": {"pid": "010D", "unit": "km/h", "formula": lambda d: int(d[0],16)},
+    "COOLANT": {"pid": "0105", "unit": "°C", "formula": lambda d: int(d[0],16)-40},
+    "EVAP_PRESS": {"pid": "0132", "unit": "Pa", "formula": lambda d: ((int(d[0],16)*256)+int(d[1],16))/4},
+    "BOOST": {"pid": "010B", "unit": "kPa", "formula": lambda d: int(d[0],16) - 101},
+    "VOLTAGE": {"pid": "0142", "unit": "V", "formula": lambda d: (int(d[0],16)*256 + int(d[1],16))/1000},
+    "OIL_TEMP": {"pid": "015C", "unit": "°C", "formula": lambda d: int(d[0],16)-40},
+    "LOAD": {"pid": "0104", "unit": "%", "formula": lambda d: int(d[0],16)*100/255},
+}
 
-
-# --- КОНСТАНТИ ELM327 ---
-CMD_ATZ = "ATZ"
-CMD_RPM = "010C"
-CMD_TEMP = "0105"
-CMD_EVAP = "0132"
-
-class DashboardTab(FloatLayout):
-    status_text = StringProperty("СТАТУС: ВІДКЛЮЧЕНО")
-    rpm_text = StringProperty("0\nRPM")
-    temp_text = StringProperty("0°C\nCOOLANT")
-    evap_text = StringProperty("0 Pa\nEVAP")
-
-    def __init__(self, **kwargs):
-        super(DashboardTab, self).__init__(**kwargs)
+# --- 1. ГОЛОВНЕ МЕНЮ ---
+class MainMenu(Screen):
+    def __init__(self, **kw):
+        super().__init__(**kw)
+        root = FloatLayout()
+        root.add_widget(Image(source='background.png', allow_stretch=True, keep_ratio=False))
         
-        # 1. ФОН (Переконайтеся, що файл background.png є в папці проекту на GitHub)
+        menu_grid = GridLayout(cols=2, spacing=20, padding=30, size_hint=(0.9, 0.75), pos_hint={'center_x': 0.5, 'center_y': 0.45})
+        
+        btns = [
+            ("ПРИЛАДИ\nOBD2", "dash"), ("СТАТУС\nELM327", "status"),
+            ("AI\nASSISTANT", "ai"), ("CONFIG\nP3TOOL", "p3tool"),
+            ("СЕРВІС", "service"), ("НАЛАШТУВАННЯ", "settings")
+        ]
+        
+        for text, sn in btns:
+            b = Button(text=text, background_color=(0,0,0,0.4), halign='center', bold=True, background_normal='')
+            b.bind(on_release=lambda x, name=sn: setattr(self.manager, 'current', name))
+            menu_grid.add_widget(b)
+            
+        root.add_widget(menu_grid)
+        root.add_widget(Label(text="VOLVO P3 SMARTSCAN", pos_hint={'top': 0.95}, font_size='22sp', bold=True))
+        self.add_widget(root)
+
+# --- 2. ЕКРАН AI ---
+class AIScreen(Screen):
+    def __init__(self, **kw):
+        super().__init__(**kw)
+        self.add_widget(Image(source='background.png', allow_stretch=True, keep_ratio=False))
+        layout = BoxLayout(orientation='vertical', padding=20, spacing=10)
+        
+        self.chat_log = Label(text="Запитай про помилку (P0455...)\n", size_hint_y=None, halign='left', valign='top')
+        self.chat_log.bind(texture_size=self.chat_log.setter('size'))
+        scroll = ScrollView(size_hint_y=0.7)
+        scroll.add_widget(self.chat_log)
+        layout.add_widget(scroll)
+        
+        self.input = TextInput(hint_text="Код помилки...", size_hint_y=None, height=100, multiline=False)
+        layout.add_widget(self.input)
+        
+        btns = BoxLayout(size_hint_y=0.15, spacing=10)
+        ask_btn = Button(text="АНАЛІЗ", background_color=(0.4, 0.2, 0.5, 1))
+        ask_btn.bind(on_release=self.ask)
+        back_btn = Button(text="НАЗАД")
+        back_btn.bind(on_release=lambda x: setattr(self.manager, 'current', 'menu'))
+        btns.add_widget(ask_btn); btns.add_widget(back_btn)
+        layout.add_widget(btns)
+        self.add_widget(layout)
+
+    def ask(self, instance):
+        q = self.input.text
+        if not q: return
+        self.chat_log.text += f"\nВи: {q}\nAI думає..."
+        self.input.text = ""
+        threading.Thread(target=self.get_ai, args=(q,)).start()
+
+    def get_ai(self, q):
         try:
-            self.add_widget(Image(source='background.png', allow_stretch=True, keep_ratio=False))
-        except:
-            pass # Якщо файлу немає, просто пропустимо
+            p = f"Ти діагност Volvo. Поясни помилку {q} коротко."
+            r = requests.post(AI_URL, json={"contents": [{"parts": [{"text": p}]}]}, timeout=10)
+            ans = r.json()['candidates'][0]['content']['parts'][0]['text']
+            Clock.schedule_once(lambda dt: setattr(self.chat_log, 'text', self.chat_log.text + f"\nAI: {ans}\n"))
+        except: Clock.schedule_once(lambda dt: setattr(self.chat_log, 'text', self.chat_log.text + "\nПомилка зв'язку."))
 
-        # 2. ОВЕРЛЕЙ З ДАНИМИ
-        content_layout = BoxLayout(orientation='vertical', padding=[40, 20, 40, 20], spacing=10)
+# --- 3. ЕКРАН ПРИЛАДІВ ---
+class DashScreen(Screen):
+    def __init__(self, **kw):
+        super().__init__(**kw)
+        self.add_widget(Image(source='background.png', allow_stretch=True, keep_ratio=False))
+        self.carousel = Carousel(direction='right')
+        self.add_widget(self.carousel)
         
-        status_label = Label(text=self.status_text, size_hint_y=0.1, font_size='16sp', color=(1, 1, 1, 0.7))
-        self.bind(status_text=status_label.setter('text'))
-        content_layout.add_widget(status_label)
-
-        data_layout = BoxLayout(orientation='vertical', spacing=10, size_hint_y=0.7)
+        back = Button(text="< МЕНЮ", size_hint=(0.2, 0.08), pos_hint={'x':0, 'top':1})
+        back.bind(on_release=lambda x: setattr(self.manager, 'current', 'menu'))
+        self.add_widget(back)
         
-        rpm_label = Label(text=self.rpm_text, font_size='60sp', bold=True, halign='center')
-        self.bind(rpm_text=rpm_label.setter('text'))
-        data_layout.add_widget(rpm_label)
-        
-        temp_label = Label(text=self.temp_text, font_size='24sp', halign='center')
-        self.bind(temp_text=temp_label.setter('text'))
-        data_layout.add_widget(temp_label)
-        
-        evap_label = Label(text=self.evap_text, font_size='24sp', halign='center', color=get_color_from_hex('#3399FF'))
-        self.bind(evap_text=evap_label.setter('text'))
-        data_layout.add_widget(evap_label)
-        
-        content_layout.add_widget(data_layout)
+        self.items = {}
 
-        # Кнопки
-        button_layout = BoxLayout(size_hint_y=0.2, spacing=15)
-        connect_btn = Button(text="ПІДКЛЮЧИТИСЯ", background_color=get_color_from_hex('#004488'), background_normal='')
-        connect_btn.bind(on_release=self.on_connect)
-        button_layout.add_widget(connect_btn)
-        
-        atz_btn = Button(text="ATZ", background_color=get_color_from_hex('#333333'), background_normal='', size_hint_x=0.3)
-        atz_btn.bind(on_release=self.on_atz)
-        button_layout.add_widget(atz_btn)
-        
-        content_layout.add_widget(button_layout)
-        self.add_widget(content_layout)
-        self.is_connected = False
+    def build_pages(self, config):
+        self.carousel.clear_widgets()
+        for page in config:
+            grid = GridLayout(cols=2 if len(page)>1 else 1, padding=40, spacing=20)
+            for name in page:
+                box = BoxLayout(orientation='vertical')
+                box.add_widget(Label(text=name, font_size='14sp'))
+                val = Label(text="--", font_size='45sp', bold=True)
+                box.add_widget(val); box.add_widget(Label(text=PIDS[name]['unit']))
+                grid.add_widget(box)
+                self.items[name] = val
+            self.carousel.add_widget(grid)
 
-    def on_connect(self, instance):
-        self.status_text = "СТАТУС: ПІДКЛЮЧЕННЯ (MOCK)..."
-        Clock.schedule_once(self.mock_connect_success, 1.5)
-
-    def mock_connect_success(self, dt):
-        self.is_connected = True
-        self.status_text = "СТАТУС: ПІДКЛЮЧЕНО (ELM327)"
-        Clock.schedule_interval(self.update_data, 1)
-
-    def on_atz(self, instance):
-        if self.is_connected:
-            self.status_text = "СТАТУС: ATZ ВІДПРАВЛЕНО"
-            Clock.schedule_once(lambda dt: setattr(self, 'status_text', "СТАТУС: ПІДКЛЮЧЕНО (ELM327)"), 1)
-
-    def update_data(self, dt):
-        import random
-        self.rpm_text = f"{random.randint(750, 850)}\nRPM"
-        self.temp_text = f"{random.randint(90, 95)}°C\nCOOLANT"
-        self.evap_text = f"{random.randint(200, 210)} Pa\nEVAP"
-
-class MainInterface(TabbedPanel):
-    def __init__(self, **kwargs):
-        super(MainInterface, self).__init__(**kwargs)
-        self.do_default_tab = False
-        self.tab_pos = 'bottom_mid'
-
-        # ВКЛАДКА 1: DASHBOARD (Ваш новий дизайн)
-        self.tab1 = TabbedPanelItem(text='DASHBOARD')
-        self.tab1.add_widget(DashboardTab())
-        self.add_widget(self.tab1)
-
-        # ВКЛАДКА 2: AI DIAGNOSTIC
-        self.tab2 = TabbedPanelItem(text='AI DIAG')
-        layout2 = BoxLayout(orientation='vertical', padding=20, spacing=15)
-        self.error_input = TextInput(text='P045500', multiline=False, size_hint_y=None, height=100, font_size='20sp')
-        layout2.add_widget(self.error_input)
-        self.btn = Button(text="АНАЛІЗУВАТИ ШІ", background_color=get_color_from_hex('#115511'), size_hint_y=None, height=120)
-        self.btn.bind(on_press=self.get_ai_help)
-        layout2.add_widget(self.btn)
-        self.scroll = ScrollView()
-        self.ai_label = Label(text="Очікування...", text_size=(400, None), halign='left', valign='top')
-        self.ai_label.bind(size=lambda s, v: setattr(self.ai_label, 'text_size', (s.width, None)))
-        self.scroll.add_widget(self.ai_label)
-        layout2.add_widget(self.scroll)
-        self.tab2.add_widget(layout2)
-        self.add_widget(self.tab2)
-
-    def get_ai_help(self, instance):
-        err = self.error_input.text.strip()
-        self.ai_label.text = "Зв'язок з сервером Gemini..."
-        prompt = f"Ти фахівець Volvo. Машина XC60 2017, T6 B4204T9. Помилка: {err}. Поясни причини українською."
-        try:
-            payload = {"contents": [{"parts": [{"text": prompt}]}]}
-            res = requests.post(AI_URL, json=payload, headers={'Content-Type': 'application/json'}, timeout=15)
-            if res.status_code == 200:
-                self.ai_label.text = res.json()['candidates'][0]['content']['parts'][0]['text']
-            else:
-                self.ai_label.text = f"Помилка {res.status_code}: {res.text}"
-        except Exception as e:
-            self.ai_label.text = f"Помилка мережі: {str(e)}"
-
-class VolvoDiagApp(App):
+# --- МЕНЕДЖЕР ТА BLUETOOTH ---
+class VolvoApp(App):
     def build(self):
-        return MainInterface()
+        self.sm = ScreenManager(transition=FadeTransition())
+        self.dash = DashScreen(name='dash')
+        self.sm.add_widget(MainMenu(name='menu'))
+        self.sm.add_widget(AIScreen(name='ai'))
+        self.sm.add_widget(self.dash)
+        # Додаємо пусті екрани для інших розділів
+        for n in ['status', 'p3tool', 'service', 'settings']:
+            self.sm.add_widget(Screen(name=n))
+            
+        self.dash.build_pages([["RPM", "COOLANT"], ["EVAP_PRESS", "BOOST"]])
+        
+        Clock.schedule_once(self.start_bt, 1)
+        return self.sm
 
-if __name__ == "__main__":
-    VolvoDiagApp().run()
-                
+    def start_bt(self, dt):
+        threading.Thread(target=self.bt_logic, daemon=True).start()
+
+    def bt_logic(self):
+        try:
+            from jnius import autoclass
+            BA = autoclass('android.bluetooth.BluetoothAdapter')
+            paired = BA.getDefaultAdapter().getBondedDevices().toArray()
+            target = next((d for d in paired if "OBD" in d.getName().upper()), None)
+            if target:
+                sock = target.createRfcommSocketToServiceRecord(autoclass('java.util.UUID').fromString("00001101-0000-1000-8000-00805F9B34FB"))
+                sock.connect()
+                self.out, self.inp = sock.getOutputStream(), sock.getInputStream()
+                while True:
+                    for name in self.dash.items.keys():
+                        self.out.write((PIDS[name]['pid'] + "\r").encode())
+                        time.sleep(0.2)
+                        res = ""
+                        while self.inp.available() > 0: res += chr(self.inp.read())
+                        if "41" in res:
+                            d = res.split()[2:]
+                            v = PIDS[name]['formula'](d)
+                            Clock.schedule_once(lambda dt, n=name, val=v: setattr(self.dash.items[n], 'text', f"{val:.0f}"))
+                    time.sleep(0.1)
+        except: pass
+
+if __name__ == '__main__':
+    VolvoApp().run()
+        
