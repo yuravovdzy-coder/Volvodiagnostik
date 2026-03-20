@@ -166,4 +166,3 @@ class VolvoApp(App):
 
 if __name__ == '__main__':
     VolvoApp().run()
-    
