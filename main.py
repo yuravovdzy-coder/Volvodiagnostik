@@ -8,7 +8,7 @@ from kivy.uix.button import Button
 from kivy.uix.scrollview import ScrollView
 
 # ВСТАВТЕ ВАШ КЛЮЧ ТУТ
-API_KEY = "AIzaSyARna8YDsY4tQd8Cv0QAsWTUJvRDTZlUWE"
+API_KEY = "AIzaSyCSZYfcXUtjZdGnk-NfDLwSERlFEDZrbVc"
 AI_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={API_KEY}"
 
 
