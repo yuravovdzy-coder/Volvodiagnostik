@@ -9,7 +9,8 @@ from kivy.uix.scrollview import ScrollView
 
 # ВСТАВТЕ ВАШ КЛЮЧ ТУТ
 API_KEY = "AIzaSyARna8YDsY4tQd8Cv0QAsWTUJvRDTZlUWE"
-AI_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key={API_KEY}"
+AI_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={API_KEY}"
+}"
 
 class MainInterface(TabbedPanel):
     def __init__(self, **kwargs):
