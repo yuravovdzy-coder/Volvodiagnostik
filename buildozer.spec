@@ -43,10 +43,10 @@ requirements = python3,kivy==2.1.0,pyserial
 # requirements.source.kivy = ../../kivy
 
 # (str) Presplash of the application
-#presplash.filename = %(source.dir)s/data/presplash.png
+presplash.filename = %(source.dir)s/logoVolvo.PNG
 
 # (str) Icon of the application
-icon.filename = %(source.dir)s/logo.PNG
+icon.filename = %(source.dir)s/logoVolvo.PNG
 
 # (list) Supported orientations
 # Valid options are: landscape, portrait, portrait-reverse or landscape-reverse
@@ -231,7 +231,7 @@ android.accept_sdk_license = True
 
 # (str) OUYA Console category. Should be one of GAME or APP
 # If you leave this blank, OUYA support will not be enabled
-#android.ouya.category = GAME
+#android.ouya.category = GAME)
 
 # (str) Filename of OUYA Console icon. It must be a 732x412 png image.
 #android.ouya.icon.filename = %(source.dir)s/data/ouya_icon.png
