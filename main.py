@@ -13,8 +13,12 @@ from kivy.properties import StringProperty
 from kivy.utils import get_color_from_hex
 
 # --- НАЛАШТУВАННЯ API ---
+# ВСТАВТЕ ВАШ КЛЮЧ
 API_KEY = "AIzaSyARna8YDsY4tQd8Cv0QAsWTUJvRDTZlUWE"
-AI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + API_KEY
+
+# ОНОВЛЕНИЙ URL (Версія v1 замість v1beta)
+AI_URL = "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=" + API_KEY
+
 
 # --- КОНСТАНТИ ELM327 ---
 CMD_ATZ = "ATZ"
