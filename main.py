@@ -98,14 +98,6 @@ class MainMenu(Screen):
         self.add_widget(root)
 
 class DashScreen(Screen):
-    def on_pre_enter(self):
-        self.container.clear_widgets()
-        app = App.get_running_app()
-        if not app.selected_pids:
-            self.container.add_widget(Label(text="Оберіть прилади в налаштуваннях ⚙️", font_name=MY_FONT))
-        for name, gtype in app.selected_pids.items():
-            self.container.add_widget(GraphWidget(name=name, graph_type=gtype, size_hint_y=None, height=250))
-
     def __init__(self, **kw):
         super().__init__(**kw)
         self.add_widget(Image(source='background.png', allow_stretch=True, keep_ratio=False))
@@ -123,6 +115,14 @@ class DashScreen(Screen):
         
         root.add_widget(scroll); root.add_widget(btn_set); root.add_widget(back)
         self.add_widget(root)
+
+    def on_pre_enter(self):
+        self.container.clear_widgets()
+        app = App.get_running_app()
+        if not app.selected_pids:
+            self.container.add_widget(Label(text="Оберіть прилади в налаштуваннях ⚙️", font_name=MY_FONT))
+        for name, gtype in app.selected_pids.items():
+            self.container.add_widget(GraphWidget(name=name, graph_type=gtype, size_hint_y=None, height=250))
 
 class DashSettingsScreen(Screen):
     def __init__(self, **kw):
@@ -193,8 +193,85 @@ class AIScreen(Screen):
         self.log.text = self.log.text.replace("[i]Шукаю рішення...[/i]", "")
         self.log.text += f"\n[b]AI:[/b] {txt}"
 
+class ServiceScreen(Screen):
+    def __init__(self, **kw):
+        super().__init__(**kw)
+        self.add_widget(Image(source='background.png', allow_stretch=True, keep_ratio=False))
+        l = BoxLayout(orientation='vertical', padding=20)
+        self.info = Label(text="", font_name=MY_FONT, size_hint_y=None, halign='left', text_size=(Window.width*0.8, None))
+        self.info.bind(texture_size=self.info.setter('size'))
+        scroll = ScrollView(); scroll.add_widget(self.info); l.add_widget(scroll)
+        back = Button(text="НАЗАД", font_name=MY_FONT, size_hint_y=0.15)
+        back.bind(on_release=lambda x: setattr(self.manager, 'current', 'menu'))
+        l.add_widget(back); self.add_widget(l)
+
+    def on_pre_enter(self):
+        try:
+            with open('service_data.txt', 'r', encoding='utf-8') as f:
+                self.info.text = f.read()
+        except:
+            self.info.text = "Дані сервісу відсутні."
+
+class P3FinderScreen(Screen):
+    def __init__(self, **kw):
+        super().__init__(**kw)
+        self.add_widget(Image(source='background.png', allow_stretch=True, keep_ratio=False))
+        l = BoxLayout(orientation='vertical', padding=20, spacing=10)
+        self.res = Label(text="Результати пошуку...", font_name=MY_FONT, size_hint_y=None, halign='left', text_size=(Window.width*0.8, None))
+        self.res.bind(texture_size=self.res.setter('size'))
+        scroll = ScrollView(); scroll.add_widget(self.res); l.add_widget(scroll)
+        self.inp = TextInput(hint_text="Назва параметра...", font_name=MY_FONT, size_hint_y=None, height=100)
+        l.add_widget(self.inp)
+        btns = BoxLayout(size_hint_y=0.15, spacing=10)
+        b1 = Button(text="ШУКАТИ", font_name=MY_FONT, background_color=(0,0.4,0.3,1))
+        b1.bind(on_release=self.find)
+        b2 = Button(text="НАЗАД", font_name=MY_FONT)
+        b2.bind(on_release=lambda x: setattr(self.manager, 'current', 'menu'))
+        btns.add_widget(b1); btns.add_widget(b2); l.add_widget(btns); self.add_widget(l)
+
+    def find(self, instance):
+        q = self.inp.text.lower().strip()
+        try:
+            with open('p3_data.txt', 'r', encoding='utf-8') as f:
+                parts = f.read().split('P#')
+                out = ["P#"+i.strip() for i in parts if q in i.lower()]
+                self.res.text = "\n\n---\n\n".join(out) if out else "Не знайдено."
+        except:
+            self.res.text = "Файл p3_data.txt не знайдено."
+
+class StatusScreen(Screen):
+    def __init__(self, **kw):
+        super().__init__(**kw)
+        l = BoxLayout(orientation='vertical', padding=20)
+        l.add_widget(Label(text="ELM327 Статус: Не підключено", font_name=MY_FONT))
+        back = Button(text="НАЗАД", size_hint_y=0.1)
+        back.bind(on_release=lambda x: setattr(self.manager, 'current', 'menu'))
+        l.add_widget(back)
+        self.add_widget(l)
+
+class SettingsScreen(Screen):
+    def __init__(self, **kw):
+        super().__init__(**kw)
+        l = BoxLayout(orientation='vertical', padding=20)
+        l.add_widget(Label(text="Налаштування додатка", font_name=MY_FONT))
+        back = Button(text="НАЗАД", size_hint_y=0.1)
+        back.bind(on_release=lambda x: setattr(self.manager, 'current', 'menu'))
+        l.add_widget(back)
+        self.add_widget(l)
+
 class VolvoApp(App):
     selected_pids = {}
     def build(self):
-        sm =
-        
+        sm = ScreenManager(transition=FadeTransition())
+        sm.add_widget(MainMenu(name='menu'))
+        sm.add_widget(DashScreen(name='dash'))
+        sm.add_widget(DashSettingsScreen(name='dash_settings'))
+        sm.add_widget(AIScreen(name='ai'))
+        sm.add_widget(ServiceScreen(name='svc'))
+        sm.add_widget(P3FinderScreen(name='p3'))
+        sm.add_widget(StatusScreen(name='status'))
+        sm.add_widget(SettingsScreen(name='settings'))
+        return sm
+
+if __name__ == '__main__':
+    VolvoApp().run()
