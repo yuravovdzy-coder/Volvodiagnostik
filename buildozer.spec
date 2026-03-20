@@ -94,7 +94,9 @@ fullscreen = 0
 
 # (list) Permissions
 # (See https://python-for-android.readthedocs.io/en/latest/buildoptions/#build-options-1 for all the supported syntaxes and properties)
-android.permissions = INTERNET, BLUETOOTH, BLUETOOTH_ADMIN, ACCESS_FINE_LOCATION, BLUETOOTH_SCAN, BLUETOOTH_CONNECT
+android.permissions = INTERNET, BLUETOOTH, BLUETOOTH_ADMIN, ACCESS_FINE_LOCATION
+# ДОДАЙ ЦЕЙ РЯДОК:
+android.uses_cleartext_traffic = 1
 
 # (list) features (adds uses-feature -tags to manifest)
 #android.features = android.hardware.usb.host
